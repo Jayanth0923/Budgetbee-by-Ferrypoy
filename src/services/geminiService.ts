@@ -8,8 +8,11 @@ export const getBudgetInsights = async (expenses: Expense[]) => {
     
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // THE FIX: Use "gemini-pro" as it is universally supported
-    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
+    // THE FIX: Forcing the stable 'v1' API version and using the recommended flash model
+    const model = genAI.getGenerativeModel(
+      { model: "gemini-1.5-flash" },
+      { apiVersion: "v1" } // This overrides the broken v1beta default!
+    );
 
     const expenseSummary = expenses.map(e => ({
       name: e.name, category: e.category, amount: e.amount
