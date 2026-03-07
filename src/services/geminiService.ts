@@ -9,7 +9,7 @@ export const getBudgetInsights = async (expenses: Expense[]) => {
     const genAI = new GoogleGenerativeAI(apiKey);
     
     // THE FIX: Use "gemini-pro" as it is universally supported
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
 
     const expenseSummary = expenses.map(e => ({
       name: e.name, category: e.category, amount: e.amount
