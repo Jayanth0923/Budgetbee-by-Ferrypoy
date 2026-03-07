@@ -1,0 +1,5 @@
+{
+  "name": "Budgetbee by Ferrypot",
+  "description": "A high-quality daily expense tracking PWA with Firebase authentication and Excel export capabilities.",
+  "requestFramePermissions": []
+}

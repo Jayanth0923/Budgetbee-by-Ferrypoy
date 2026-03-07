@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-brand: #10b981; /* Emerald 500 */
+  --color-brand-dark: #059669; /* Emerald 600 */
+  
+  /* Safe Area Variables */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Configure dark mode to work with the .dark class on the html element (Tailwind v4 selector strategy) */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased transition-colors duration-300;
+    @apply dark:bg-zinc-950 dark:text-zinc-100;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+@layer utilities {
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+  .mt-safe {
+    margin-top: var(--safe-top);
+  }
+  .mb-safe {
+    margin-bottom: var(--safe-bottom);
+  }
+  .top-safe {
+    top: var(--safe-top);
+  }
+  .bottom-safe {
+    bottom: var(--safe-bottom);
+  }
+}
+
+.glass {
+  @apply bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-white/20 dark:border-zinc-800/20;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
