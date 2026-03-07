@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai"; // Corrected Package & Class
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Expense } from "../types";
 
 export const getBudgetInsights = async (expenses: Expense[]) => {
@@ -6,26 +6,26 @@ export const getBudgetInsights = async (expenses: Expense[]) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
     
     if (!apiKey) {
-      throw new Error("Gemini API Key is missing. Check GitHub Secrets.");
+      throw new Error("Gemini API Key is missing. Check your GitHub Secrets.");
     }
     
-    // 1. Correct class name: GoogleGenerativeAI
     const genAI = new GoogleGenerativeAI(apiKey);
     
-    // 2. Use 'gemini-1.5-flash' as the stable model ID
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // PERMANENT FIX: Use gemini-2.0-flash (Stable)
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.0-flash" 
+    });
 
     const expenseSummary = expenses.map(e => ({
       name: e.name,
       category: e.category,
       amount: e.amount,
-      quantity: e.quantity,
-      timestamp: e.timestamp
+      quantity: e.quantity
     }));
 
     const prompt = `Here are my recent expenses: ${JSON.stringify(expenseSummary)}. Can you provide 3 brief, actionable financial tips?`;
 
-    // 3. Updated syntax for the stable SDK
+    // Correct method for the current SDK
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return response.text();
