@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai"; // Corrected Package & Class
 import { Expense } from "../types";
 
 export const getBudgetInsights = async (expenses: Expense[]) => {
@@ -6,12 +6,15 @@ export const getBudgetInsights = async (expenses: Expense[]) => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
     
     if (!apiKey) {
-      throw new Error("Gemini API Key is missing. Please check your GitHub Secrets.");
+      throw new Error("Gemini API Key is missing. Check GitHub Secrets.");
     }
     
-    // 1. Initialize the AI client
-    const ai = new GoogleGenAI({ apiKey });
+    // 1. Correct class name: GoogleGenerativeAI
+    const genAI = new GoogleGenerativeAI(apiKey);
     
+    // 2. Use 'gemini-1.5-flash' as the stable model ID
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
     const expenseSummary = expenses.map(e => ({
       name: e.name,
       category: e.category,
@@ -20,16 +23,13 @@ export const getBudgetInsights = async (expenses: Expense[]) => {
       timestamp: e.timestamp
     }));
 
-    // 2. Use the updated model name and correct method call
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash", // Updated to the current stable model
-      contents: `Here are my recent expenses: ${JSON.stringify(expenseSummary)}. Can you provide 3 brief, actionable financial tips or insights?`,
-      config: {
-        systemInstruction: "You are a friendly and professional financial advisor named BudgetBee. Your goal is to help users save money and manage their budgets better. Keep your advice concise, encouraging, and based on the data provided.",
-      },
-    });
+    const prompt = `Here are my recent expenses: ${JSON.stringify(expenseSummary)}. Can you provide 3 brief, actionable financial tips?`;
 
-    return response.text;
+    // 3. Updated syntax for the stable SDK
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+
   } catch (error: any) {
     console.error("Error getting budget insights:", error);
     return `I couldn't generate insights right now. Please try again later!`;
