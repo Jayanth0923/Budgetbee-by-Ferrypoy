@@ -7,7 +7,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/re
 import { Plus, Search, TrendingUp, Wallet, Clock, Tag, Trash2, Edit2, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "../lib/utils";
-//import { triggerHaptic, HapticType } from "../utils/haptics"; // KEPT for swipe
+import { triggerHaptic, HapticType } from "../utils/haptics"; // KEPT for swipe
 import { BudgetAdvisor } from "./BudgetAdvisor";
 
 export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: Expense) => void }> = ({ onAddClick, onEditExpense }) => {
@@ -95,45 +95,49 @@ export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: E
 
   return (
     <div className="pt-[calc(180px+var(--safe-top))] pb-32">
-      {/* Fixed Header Section */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-zinc-50/95 dark:bg-zinc-950/95 backdrop-blur-xl border-b border-zinc-200/60 dark:border-zinc-800/60 shadow-sm w-full md:max-w-2xl lg:max-w-4xl mx-auto pt-safe">
-        {/* Welcome Header */}
-        <div className="p-4 pt-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Hi, {user?.displayName?.split(' ')[0] || 'User'}</p>
-              <h1 className="text-xl font-black text-zinc-900 dark:text-white">
-                {isNewUser ? "Welcome to Budgetbee 🐝" : "Welcome Back! 🐝"}
-              </h1>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center overflow-hidden border-2 border-white dark:border-zinc-800 shadow-sm">
-              {user?.photoURL ? (
-                <img src={user.photoURL} alt="Profile" referrerPolicy="no-referrer" />
-              ) : (
-                <span className="text-emerald-600 dark:text-emerald-400 font-bold">{user?.displayName?.[0]}</span>
-              )}
-            </div>
-          </div>
-
-          {/* Total Section */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-emerald-500 p-4 rounded-2xl text-white shadow-lg shadow-emerald-200 dark:shadow-emerald-900/20">
-              <div className="flex items-center space-x-2 mb-1 opacity-80">
-                <Wallet size={12} />
-                <span className="text-[9px] uppercase tracking-widest font-black">Total spent</span>
-              </div>
-              <p className="text-xl font-black tracking-tight">₹{totalExpense.toLocaleString()}</p>
-            </div>
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-              <div className="flex items-center space-x-2 mb-1 text-zinc-400 dark:text-zinc-500">
-                <TrendingUp size={12} />
-                <span className="text-[9px] uppercase tracking-widest font-black">Today's Spend</span>
-              </div>
-              <p className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">₹{todayExpense.toLocaleString()}</p>
-            </div>
-          </div>
-        </div>
+      {/* Fixed Header Section - Larger & Bolder UI */}
+<div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900 border-b border-zinc-200/60 dark:border-zinc-800/60 shadow-md w-full md:max-w-2xl lg:max-w-4xl mx-auto pt-safe">
+  {/* Welcome Header */}
+  <div className="p-6 pt-8">
+    <div className="flex items-center justify-between mb-6">
+      <div>
+        <p className="text-zinc-500 dark:text-zinc-400 text-base font-medium mb-1">
+          Hi, {user?.displayName?.split(' ')[0] || 'User'}
+        </p>
+        <h1 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+          {isNewUser ? "Welcome to Budgetbee 🐝" : "Welcome Back! 🎉🎉"}
+        </h1>
       </div>
+      <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center overflow-hidden border-3 border-white dark:border-zinc-800 shadow-md">
+        {user?.photoURL ? (
+          <img src={user.photoURL} alt="Profile" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+        ) : (
+          <span className="text-emerald-600 dark:text-emerald-400 font-black text-2xl">
+            {user?.displayName?.[0] || 'U'}
+          </span>
+        )}
+      </div>
+    </div>
+
+    {/* Total Section - Larger Cards */}
+    <div className="grid grid-cols-2 gap-4">
+      <div className="bg-emerald-500 p-6 rounded-3xl text-white shadow-xl shadow-emerald-200/50 dark:shadow-emerald-900/30">
+        <div className="flex items-center space-x-2 mb-2 opacity-80">
+          <Wallet size={16} strokeWidth={2.5} />
+          <span className="text-xs uppercase tracking-widest font-black">Total spent</span>
+        </div>
+        <p className="text-3xl font-black tracking-tight">₹{totalExpense.toLocaleString()}</p>
+      </div>
+      <div className="bg-white dark:bg-zinc-900 p-6 rounded-3xl border-2 border-zinc-100 dark:border-zinc-800 shadow-lg">
+        <div className="flex items-center space-x-2 mb-2 text-zinc-400 dark:text-zinc-500">
+          <TrendingUp size={16} strokeWidth={2.5} />
+          <span className="text-xs uppercase tracking-widest font-black">Today's Spend</span>
+        </div>
+        <p className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">₹{todayExpense.toLocaleString()}</p>
+      </div>
+    </div>
+  </div>
+</div>
 
       <div className="p-4 space-y-8">
         {/* Quick Add */}
@@ -195,10 +199,10 @@ export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: E
                       dragSnapToOrigin
                       onDragEnd={(_, info) => {
                         if (info.offset.x > 80) {
-                          // triggerHaptic(HapticType.MEDIUM); // KEPT: swipe right edit
+                          triggerHaptic(HapticType.MEDIUM); // KEPT: swipe right edit
                           onEditExpense(expense);
                         } else if (info.offset.x < -80) {
-                          // triggerHaptic(HapticType.WARNING); // KEPT: swipe left delete
+                          triggerHaptic(HapticType.WARNING); // KEPT: swipe left delete
                           setExpenseToDelete(expense);
                         }
                       }}
