@@ -7,8 +7,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "motion/re
 import { Plus, Search, TrendingUp, Wallet, Clock, Tag, Trash2, Edit2, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "../lib/utils";
-// ADDED: Import haptic utility
-import { triggerHaptic, HapticType } from "../utils/haptics";
+import { triggerHaptic, HapticType } from "../utils/haptics"; // KEPT for swipe
 import { BudgetAdvisor } from "./BudgetAdvisor";
 
 export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: Expense) => void }> = ({ onAddClick, onEditExpense }) => {
@@ -68,7 +67,7 @@ export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: E
 
   const handleQuickAdd = async (item: {name: string, category: string}) => {
     if (!user) return;
-    // No haptic for quick add (kept silent)
+    // No haptic for quick add
     try {
       const lastItem = expenses.find(e => e.name === item.name);
       await addDoc(collection(db, "expenses"), {
@@ -89,7 +88,6 @@ export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: E
     try {
       await deleteDoc(doc(db, "expenses", expenseToDelete.id));
       setExpenseToDelete(null);
-      // No haptic on delete confirmation (kept silent)
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -197,12 +195,10 @@ export const Home: React.FC<{ onAddClick: () => void; onEditExpense: (expense: E
                       dragSnapToOrigin
                       onDragEnd={(_, info) => {
                         if (info.offset.x > 80) {
-                          // ADDED: Haptic for edit swipe
-                          triggerHaptic(HapticType.MEDIUM);
+                          triggerHaptic(HapticType.MEDIUM); // KEPT: swipe right edit
                           onEditExpense(expense);
                         } else if (info.offset.x < -80) {
-                          // ADDED: Haptic for delete swipe
-                          triggerHaptic(HapticType.WARNING);
+                          triggerHaptic(HapticType.WARNING); // KEPT: swipe left delete
                           setExpenseToDelete(expense);
                         }
                       }}
